@@ -7,6 +7,28 @@
     true
     (not (some zero? (map #(mod num %) (range 3 num))))))
 
+(defn primes-to
+  "Returns a lazy sequence of prime numbers less than lim"
+  [lim]
+  (let [refs (boolean-array (+ lim 1) true)
+        root (int (Math/sqrt lim))]
+    (do (doseq [i (range 2 lim)
+                :while (<= i root)
+                :when (aget refs i)]
+          (doseq [j (range (* i i) lim i)]
+            (aset refs j false)))
+        (filter #(aget refs %) (range 2 lim)))))
+
+(defn primes-to
+  "Computes lazy sequence of prime numbers up to a given number using sieve of Eratosthenes"
+  [n]
+  (letfn [(nxtprm [cs] ; current candidates
+            (let [p (first cs)]
+              (if (> p (Math/sqrt n)) cs
+                (cons p (lazy-seq (nxtprm (-> (range (* p p) (inc n) p)
+                                              set (remove cs) rest)))))))]
+    (nxtprm (range 2 (inc n)))))
+
 ;;problem 2
 ;;problem 3
 #_(filter prime? (filter #(zero? (rem 600851475143 %)) (range 3 775146 2)))
@@ -60,17 +82,34 @@
 
 ;;problem 7
 ;;problem 8
+#_(str/replace (slurp "resources/p8.txt" ) #"\r\n" "")
+(defn recurtake [coll] (if (= (count coll) 13)
+                         (conj [] (map #(- (int %) 48) (take 13 coll)))
+                         (conj (recurtake (rest coll)) (map #(- (int %) 48) (take 13 coll)) )))
+(defn filterpos [coll] (filter #(every? pos? %) coll))
+(defn p8 [coll] (apply max (map #(apply * %) (filterpos (recurtake coll))))
+)
 ;;problem 9
-;;problem 10
-;;problem 11
-;;problem 12
-(defn triangle-num [])
+(defn sptriplet? [a b]
+  (== 1000 (+ a b (Math/sqrt (+ (* a a) (* b b))))))
 
-;;problem 13
-;;problem 14
-;;problem 15
-;;problem 16
-;;problem 17
-;;problem 18
-;;problem 19
-;;problem 20
+(defn multipal [x1 x2]
+  (keep #(if (not (nil? %)) %)
+        (for [x (range x1 x2)
+              y (range x1 x2) :while (<= y x)]
+          (if (sptriplet? x y) (* x y (Math/sqrt (+ (* x x) (* y y))))))))
+
+;;problem 10
+(defn p10 [n] (apply + (primes-to 1000000)))
+
+(defn greverse
+  [[x & xs]]
+  (if xs
+    (conj (greverse xs) x)
+    (conj [] x)))
+
+(defn greverse
+  [coll]
+  (if (empty? (butlast coll))
+    (cons (last coll) [])
+    (cons (last coll) (greverse (butlast coll)))))

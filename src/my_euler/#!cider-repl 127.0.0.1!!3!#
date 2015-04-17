@@ -1,0 +1,99 @@
+; CIDER 0.7.0 (Java 1.7.0_25, Clojure 1.6.0, nREPL 0.2.6, cider-nrepl 0.7.0)
+my-euler.core> (last (primes-to 10000000))
+my-euler.core> (defn primes-to
+  "Returns a lazy sequence of prime numbers less than lim"
+  [lim]
+  (let [refs (boolean-array (+ lim 1) true)
+        root (int (Math/sqrt lim))]
+    (do (doseq [i (range 2 lim)
+                :while (<= i root)
+                :when (aget refs i)]
+          (doseq [j (range (* i i) lim i)]
+            (aset refs j false)))
+        (filter #(aget refs %) (range 2 lim)))))
+#'my-euler.core/primes-to
+my-euler.core> (last (primes-to 10000000))
+9999991
+my-euler.core> (apply + (primes-to 2000000))
+142913828922
+my-euler.core> (count (primes-to 1000000))
+78498
+my-euler.core> (def a (primes-to 1000000))
+#'my-euler.core/a
+my-euler.core> (def a (primes-to 22))
+#'my-euler.core/a
+my-euler.core> a
+(2 3 5 7 11 13 17 19)
+my-euler.core> (take 21 (primes-to 100))
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73)
+my-euler.core> (reduce + *1)
+712
+my-euler.core> (take 21 (primes-to 100))
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73)
+my-euler.core> (count  (primes-to 100))
+25
+my-euler.core> (defn guvriel
+  [n]
+  (if (= n 1)
+    1
+    (+ (guvriel (dec n)))))
+
+#'my-euler.core/guvriel
+my-euler.core> (guvriel 7)
+1
+my-euler.core> (defn guvriel
+  [n]
+  (if (= n 1)
+    1
+    (+ n (guvriel (dec n)))))
+
+#'my-euler.core/guvriel
+my-euler.core> (guvriel 7)
+28
+my-euler.core> (guvriel 3)
+6
+my-euler.core> (defn guvriel
+  [n]
+  (if (= n 1)
+    1
+    (+ n (guvriel (dec n)))))
+
+#'my-euler.core/guvriel
+my-euler.core> (guvriel 3)
+6
+my-euler.core> (guvriel 3)
+6
+my-euler.core> (guvriel 4)
+10
+my-euler.core> (guvriel 5)
+15
+my-euler.core> (guvriel 7)
+28
+my-euler.core> 6
+6
+my-euler.core> (guvriel 6)
+21
+my-euler.core> (seq? [])
+false
+my-euler.core> (conj '() 9)
+(9)
+my-euler.core> (defn greverse
+  [[x & xs]]
+  (if xs
+    (conj (greverse xs) x)
+    (conj '() x)))
+#'my-euler.core/greverse
+my-euler.core> (greverse [1 2 3 4 5])
+(1 2 3 4 5)
+my-euler.core> (greverse '(1 2 3 4 5))
+(1 2 3 4 5)
+my-euler.core> (defn greverse
+  [[x & xs]]
+  (if xs
+    (conj (greverse xs) x)
+    (conj [] x)))
+
+#'my-euler.core/greverse
+my-euler.core> (greverse '(1 2 3 4 5))
+[5 4 3 2 1]
+my-euler.core> 
