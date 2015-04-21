@@ -87,8 +87,8 @@
                          (conj [] (map #(- (int %) 48) (take 13 coll)))
                          (conj (recurtake (rest coll)) (map #(- (int %) 48) (take 13 coll)) )))
 (defn filterpos [coll] (filter #(every? pos? %) coll))
-(defn p8 [coll] (apply max (map #(apply * %) (filterpos (recurtake coll))))
-)
+(defn p8 [coll] (apply max (map #(apply * %) (filterpos (recurtake coll)))))
+
 ;;problem 9
 (defn sptriplet? [a b]
   (== 1000 (+ a b (Math/sqrt (+ (* a a) (* b b))))))

@@ -35,6 +35,9 @@
 
 #_(reduce * (filter #(not (zero? %)) (p33 100)))
 
+;;problem35
+()
+
 ;;problem34
 (defn factorial [n]
   (if (zero? n)
